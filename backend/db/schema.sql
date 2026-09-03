@@ -1,34 +1,32 @@
 CREATE TABLE IF NOT EXISTS rol (
-    id CHAR(36) PRIMARY KEY AUTO_INCREMENT, 
+    id INT PRIMARY KEY AUTO_INCREMENT, 
     nombre VARCHAR(50) NOT NULL UNIQUE,
     gatename VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS usuario (
-    id CHAR(36) PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     correo VARCHAR(255) NOT NULL UNIQUE,
     nombre VARCHAR(255) NOT NULL,
     contrasena_Hash VARCHAR(255) NOT NULL,
-    rol_id CHAR(36) NOT NULL,
+    rol_id INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (rol_id) REFERENCES rol(id)
 );
 
 CREATE TABLE IF NOT EXISTS categoria (
-    id CHAR(36) PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS estado (
-    id CHAR(36) PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS reporte (
-    id CHAR(36) PRIMARY KEY AUTO_INCREMENT,
-    nivel_riesgo VARCHAR(255) NOT NULL,
-    tipo_fraude VARCHAR(100) NOT NULL,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     descripcion TEXT NOT NULL,
     nivel_riesgo VARCHAR(20) NOT NULL DEFAULT 'pendiente',
 
@@ -36,22 +34,30 @@ CREATE TABLE IF NOT EXISTS reporte (
     fecha_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     fecha_aprob TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    usuario_id CHAR(36) NOT NULL,
-    categoria_id CHAR(36) NOT NULL,
-    estado_id CHAR(36) NOT NULL,
+    usuario_id INT NOT NULL,
+    estado_id INT NOT NULL,
 
     FOREIGN KEY (usuario_id) REFERENCES usuario(id),
-    FOREIGN KEY (categoria_id) REFERENCES categoria(id),
     FOREIGN KEY (estado_id) REFERENCES estado(id),
 );
 
 CREATE TABLE IF NOT EXISTS evidencia (
-    id CHAR(36) PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     url VARCHAR(255) NOT NULL,
     foto VARCHAR(255) NOT NULL,
     fecha_creado TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    reporte_id CHAR(36) NOT NULL,
+    reporte_id INT NOT NULL,
 
+    FOREIGN KEY (reporte_id) REFERENCES reporte(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS reporte_categoria (
+    reporte_id INT NOT NULL,
+    categoria_id INT  NOT NULL,
+    fecha_asignacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (reporte_id, categoria_id),
     FOREIGN KEY (reporte_id) REFERENCES reporte(id),
+    FOREIGN KEY (categoria_id) REFERENCES categoria(id)
 );
