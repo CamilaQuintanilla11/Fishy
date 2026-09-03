@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS reporte (
     estado_id INT NOT NULL,
 
     FOREIGN KEY (usuario_id) REFERENCES usuario(id),
-    FOREIGN KEY (estado_id) REFERENCES estado(id),
+    FOREIGN KEY (estado_id) REFERENCES estado(id)
 );
 
 CREATE TABLE IF NOT EXISTS evidencia (
