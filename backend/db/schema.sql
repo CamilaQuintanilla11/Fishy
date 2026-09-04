@@ -9,10 +9,10 @@ CREATE TABLE IF NOT EXISTS usuario (
     correo VARCHAR(255) NOT NULL UNIQUE,
     nombre VARCHAR(255) NOT NULL,
     contrasenaHash VARCHAR(255) NOT NULL,
-    rol_id INT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    tieneRol INT NOT NULL,
+    fecha_creado TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (rol_id) REFERENCES rol(id)
+    FOREIGN KEY (tieneRol) REFERENCES rol(id)
 );
 
 CREATE TABLE IF NOT EXISTS categoria (
@@ -34,11 +34,11 @@ CREATE TABLE IF NOT EXISTS reporte (
     fecha_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     fecha_aprob TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    usuario_id INT NOT NULL,
-    estado_id INT NOT NULL,
+    perteneceA INT NOT NULL,
+    tieneEstado INT NOT NULL,
 
-    FOREIGN KEY (usuario_id) REFERENCES usuario(id),
-    FOREIGN KEY (estado_id) REFERENCES estado(id)
+    FOREIGN KEY (perteneceA) REFERENCES usuario(id),
+    FOREIGN KEY (tieneEstado) REFERENCES estado(id)
 );
 
 CREATE TABLE IF NOT EXISTS evidencia (
@@ -47,9 +47,9 @@ CREATE TABLE IF NOT EXISTS evidencia (
     foto VARCHAR(255) NOT NULL,
     fecha_creado TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    reporte_id INT NOT NULL,
+    perteneceAReporte INT NOT NULL,
 
-    FOREIGN KEY (reporte_id) REFERENCES reporte(id) ON DELETE CASCADE
+    FOREIGN KEY (perteneceAReporte) REFERENCES reporte(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS reporte_categoria (
