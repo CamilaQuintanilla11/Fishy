@@ -1,5 +1,4 @@
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator'
-
 export class CreateReporteDto{
     @IsNotEmpty()
     usuario_id:number;
