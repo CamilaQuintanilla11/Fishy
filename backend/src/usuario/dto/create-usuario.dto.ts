@@ -3,8 +3,9 @@ import {
     IsNotEmpty,
     IsOptional,
     IsString,
-    Matches,
-} from 'class-validator'
+    IsIn,
+    MinLength,
+} from 'class-validator';
 
 export class CreateUsuarioDto {
   @IsString()
@@ -21,4 +22,5 @@ export class CreateUsuarioDto {
   @IsOptional()
   @IsIn(['usuario', 'admin'])
   rol?: string;
+    tieneRol: any;
 }

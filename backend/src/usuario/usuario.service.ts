@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+const bcrypt = require('bcrypt') as typeof import('bcrypt');
 import { UsuarioRepository } from './usuario.repository';
 import { RolRepository } from '../rol/rol.repository';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
@@ -13,7 +13,7 @@ export class UsuarioService {
 
     async crear(dto: CreateUsuarioDto): Promise<UsuarioResponseDto> {
         const yaExiste = await this.usuarioRepository.findByCorreo(dto.correo);
-        if (yaExiste) throw new ConflictException('No se puede completar el registro.'):
+        if (yaExiste) throw new ConflictException('No se puede completar el registro.');
 
         let tieneRol = dto.tieneRol;
         if (!tieneRol) {
