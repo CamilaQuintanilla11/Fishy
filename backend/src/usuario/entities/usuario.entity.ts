@@ -1,8 +1,8 @@
 export class Usuario {
-    id: number;
+    id: string;
     correo: string;
     nombre: string;
     contrasenaHash: string;
-    rolId: number;
-    created_at: Date;
+    tieneRol: string;
+    fecha_creado: Date;
 }

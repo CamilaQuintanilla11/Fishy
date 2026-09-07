@@ -1,4 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
+import type { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
+import { DB_POOL } from '../database/database.module';
+import { Usuario } from './entities/usuario.entity';
 
 const COLUMNS = 'id, correo, nombre, contrasenaHash, tieneRol, fecha_creado';
 
@@ -30,13 +34,14 @@ export class UsuarioRepository {
         const id = randomUUID();
         await this.pool.query(
             `INSERT INTO usuario (id, nombre, correo, contrasenaHash, tieneRol) VALUES (?, ?, ?, ?, ?)`,
-            [id, usuario.nombre, usuario.correo, usuario.contrasenaHash, usuario.tieneRol ?? 'usuario'],
+            [id, usuario.nombre, usuario.correo, usuario.contrasenaHash, usuario.tieneRol],
     );
     return (await this.findById(id))!;
     }
     async update(id: string, changes: Partial<Usuario>,): Promise<Usuario | undefined> {
-        const entries = Object.entries(changes).filter(([, value]) => value !== undefined);
-        if (entries.length === 0) return this.findById(id);
+        const allowedColumns = ['nombre', 'correo', 'contrasenaHash', 'tieneRol',];
+        const entries = Object.entries(changes).filter(([column, value]) => allowedColumns.includes(column) && value !== undefined);
+        if (entries.length === 0) return ConflictException(400);
 
         const sets = entries.map(([column]) => `${column} = ?`).join(', ');
         const values = entries.map(([, value]) => value);

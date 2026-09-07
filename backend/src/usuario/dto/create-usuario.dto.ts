@@ -15,8 +15,8 @@ export class CreateUsuarioDto {
   correo: string;
 
   @IsString()
-  @MinLength(8)
-  password: string;
+  @MinLength(10)
+  contrasena: string;
 
   @IsOptional()
   @IsIn(['usuario', 'admin'])
