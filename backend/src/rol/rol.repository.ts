@@ -11,7 +11,7 @@ export class RolRepository {
     constructor(@Inject(DB_POOL) private readonly pool: Pool) {}
 
     async findAll(): Promise<Rol[]>{
-        const [rows] = await this.pool.queryxf[]>(
+        const [rows] = await this.pool.query<RowDataPacket[]>(
             `SELECT ${COLUMNS} FROM rol ORDER BY nombre`,    
         );
         return rows.map(toEntity);
@@ -52,6 +52,14 @@ export class RolRepository {
 
         await this.pool.query(`UPDATE rol SET ${sets} WHERE id = ?`, [...values, id]);
         return this.findById(id);
+    }
+
+    async delete(id: string): Promise<boolean> {
+        const [result] = await this.pool.query<ResultSetHeader>(
+            `DELETE FROM rol WHERE id = ?`,
+            [id],
+        );
+        return result.affectedRows > 0;
     }
 }
 

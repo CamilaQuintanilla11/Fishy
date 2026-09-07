@@ -8,9 +8,9 @@ import { RolResponseDto } from './dto/rol-response.dto';
 export class RolService {
     constructor(private readonly rolRepository: RolRepository) {}
 
-    async crear(dto: CreateRolDto): Promise<UsuarioResponseDto> {
+    async crear(dto: CreateRolDto): Promise<RolResponseDto> {
         const creado = await this.rolRepository.save(dto);
-        return neew RolResponseDto(rol);
+        return new RolResponseDto(creado);
     }
 
     async obtener(id: string): Promise<RolResponseDto> {
