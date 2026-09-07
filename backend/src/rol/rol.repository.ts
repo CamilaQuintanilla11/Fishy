@@ -1,0 +1,65 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
+import type { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
+import { DB_POOL } from '../database/database.module';
+import { Rol } from './entities/rol.entity';
+
+const COLUMNS = 'id, nombre, gatename';
+
+@Injectable()
+export class RolRepository {
+    constructor(@Inject(DB_POOL) private readonly pool: Pool) {}
+
+    async findAll(): Promise<Rol[]>{
+        const [rows] = await this.pool.queryxf[]>(
+            `SELECT ${COLUMNS} FROM rol ORDER BY nombre`,    
+        );
+        return rows.map(toEntity);
+    }
+
+    async findById(id: string): Promise<Rol | undefined> {
+        const [rows] = await this.pool.query<RowDataPacket[]>(
+            `SELECT ${COLUMNS} FROM rol WHERE id = ?`,
+            [id],
+        );
+        return rows[0] && toEntity(rows[0]);
+    }
+
+    async findByNombre(nombre: string): Promise<Rol | undefined> {
+        const [rows] = await this.pool.query<RowDataPacket[]>(
+            `SELECT ${COLUMNS} FROM rol WHERE nombre = ?`,
+            [nombre],           
+        );
+        return rows[0] && toEntity(rows[0]);
+    }
+
+    async save(rol: Omit<Rol, 'id'>): Promise<Rol> {
+        const id = randomUUID();
+        await this.pool.query(
+           `INSERT INTO rol (id, nombre, gatename) VALUES (?, ?, ?)`,
+            [id, rol.nombre, rol.gatename],
+        );
+        return (await this.findById(id))!;
+    }
+
+    async update(id: string, changes: Partial<Rol>): Promise<Rol | undefined> {
+        const allowedColumns = ['nombre', 'gatename',];
+        const entries = Object.entries(changes).filter(([column, value]) => allowedColumns.includes(column) && value !== undefined);
+        if (entries.length === 0) return this.findById(id);
+
+        const sets = entries.map(([column]) => `${column} = ?`).join(', ');
+        const values = entries.map(([, value]) => value);
+
+        await this.pool.query(`UPDATE rol SET ${sets} WHERE id = ?`, [...values, id]);
+        return this.findById(id);
+    }
+}
+
+function toEntity(row: any): Rol {
+    const rol = new Rol();
+    rol.id = row.id;
+    rol.nombre = row.nombre;
+    rol.gatename = row.gatename;
+
+    return rol;
+}

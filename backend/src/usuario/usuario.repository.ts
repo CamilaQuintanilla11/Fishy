@@ -38,10 +38,10 @@ export class UsuarioRepository {
     );
     return (await this.findById(id))!;
     }
-    async update(id: string, changes: Partial<Usuario>,): Promise<Usuario | undefined> {
+    async update(id: string, changes: Partial<Usuario>): Promise<Usuario | undefined> {
         const allowedColumns = ['nombre', 'correo', 'contrasenaHash', 'tieneRol',];
         const entries = Object.entries(changes).filter(([column, value]) => allowedColumns.includes(column) && value !== undefined);
-        if (entries.length === 0) return ConflictException(400);
+        if (entries.length === 0) return this.findById(id);
 
         const sets = entries.map(([column]) => `${column} = ?`).join(', ');
         const values = entries.map(([, value]) => value);
