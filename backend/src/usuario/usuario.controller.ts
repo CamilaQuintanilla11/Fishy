@@ -28,7 +28,7 @@ export class UsuarioController {
     }
 
     @Delete(':id')
-    @HttpCode(HttpStatus.NO_CONTENT)
+    @HttpCode(204)
     eliminar(@Param('id') id:string) {
         return this.usuarioService.eliminar(id);
     }

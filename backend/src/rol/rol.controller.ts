@@ -28,7 +28,7 @@ export class RolController {
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(204)
   eliminar(@Param('id') id: string) {
     return this.rolService.eliminar(id);
   }
