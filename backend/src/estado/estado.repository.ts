@@ -1,9 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { randomUUID } from 'node:crypto';
-import type { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
+import type { Pool, RowDataPacket } from 'mysql2/promise';
 import { DB_POOL } from '../database/database.module';
 import { Estado } from './entities/estado.entity';
-import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
 
 const COLUMNS = 'id, nombre';
 
@@ -32,35 +30,6 @@ export class EstadoRepository {
             [nombre],           
         );
         return rows[0] && toEntity(rows[0]);
-    }
-
-    async save(estado: Omit<Estado, 'id'>): Promise<Estado> {
-        const id = randomUUID();
-        await this.pool.query(
-           `INSERT INTO estado (id, nombre) VALUES (?, ?)`,
-            [id, estado.nombre],
-        );
-        return (await this.findById(id))!;
-    }
-
-    async update(id: string, changes: Partial<Estado>): Promise<Estado | undefined> {
-        const allowedColumns = ['nombre'];
-        const entries = Object.entries(changes).filter(([column, value]) => allowedColumns.includes(column) && value !== undefined);
-        if (entries.length === 0) return this.findById(id);
-
-        const sets = entries.map(([column]) => `${column} = ?`).join(', ');
-        const values = entries.map(([, value]) => value);
-
-        await this.pool.query(`UPDATE estado SET ${sets} WHERE id = ?`, [...values, id]);
-        return this.findById(id);
-    }
-
-    async delete(id: string): Promise<boolean> {
-        const [result] = await this.pool.query<ResultSetHeader>(
-            `DELETE FROM estado WHERE id = ?`,
-            [id],
-        );
-        return result.affectedRows > 0;
     }
 }
 

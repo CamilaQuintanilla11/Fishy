@@ -33,6 +33,14 @@ export class RolRepository {
         return rows[0] && toEntity(rows[0]);
     }
 
+    async findByGatename(gatename: string): Promise<Rol | undefined> {
+        const [rows] = await this.pool.query<RowDataPacket[]>(
+            `SELECT ${COLUMNS} FROM rol WHERE gatename = ?`,
+            [gatename],           
+        );
+        return rows[0] && toEntity(rows[0]);
+    }
+
     async save(rol: Omit<Rol, 'id'>): Promise<Rol> {
         const id = randomUUID();
         await this.pool.query(
