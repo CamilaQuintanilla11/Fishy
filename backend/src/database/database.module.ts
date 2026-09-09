@@ -4,7 +4,7 @@ import type { Pool } from 'mysql2/promise';
 
 export const DB_POOL = 'DB_POOL';
 
-const DATABASE_URL = 'mysql://root:root@localhost:3306/reporta_fraude';
+const DATABASE_URL = 'mysql://root@localhost:3306/fishy';
 
 @Module({
   providers:[

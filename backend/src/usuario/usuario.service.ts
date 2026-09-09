@@ -15,20 +15,17 @@ export class UsuarioService {
         const yaExiste = await this.usuarioRepository.findByCorreo(dto.correo);
         if (yaExiste) throw new ConflictException('No se puede completar el registro.');
 
-        let tieneRol = dto.tieneRol;
-        if (!tieneRol) {
-            const rolDefault = await this.rolRepository.findByNombre(ROL_DEFAULT);
+        const rolDefault = await this.rolRepository.findByNombre(ROL_DEFAULT);
             if (!rolDefault) {
                 throw new Error('Error. revisar /seed.sql')
             }
-            tieneRol = rolDefault.id;
-        }
+
         const contrasenaHash = await bcrypt.hash(dto.contrasena, 10)
         const creado = await this.usuarioRepository.save({
             nombre: dto.nombre,
             correo: dto.correo,
             contrasenaHash,
-            tieneRol,
+            tieneRol: rolDefault.id,
         });
         return new UsuarioResponseDto(creado);
     }

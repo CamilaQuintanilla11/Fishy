@@ -18,9 +18,4 @@ export class CreateUsuarioDto {
   @IsString()
   @MinLength(10)
   contrasena: string;
-
-  @IsOptional()
-  @IsIn(['usuario', 'admin'])
-  rol?: string;
-    tieneRol: any;
 }
