@@ -5,6 +5,7 @@ import { RolModule } from './rol/rol.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { CategoriaModule } from './categoria/categoria.module';
 import { EstadoModule } from './estado/estado.module';
+import { ReporteModule } from './reporte/reporte.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { EstadoModule } from './estado/estado.module';
     DatabaseModule,
     RolModule,
     UsuarioModule,
+    ReporteModule,
   ],
 })
 export class AppModule {}
