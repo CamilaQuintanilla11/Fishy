@@ -9,7 +9,7 @@ import type { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 import { DB_POOL } from '../database/database.module';
 import { Usuario } from './entities/usuario.entity';
 
-const COLUMNS = 'id, correo, nombre, contrasenaHash, tieneRol, fecha_creado';
+const COLUMNS = 'id, correo, nombre, contrasenaHash, fecha_creado, tieneRol';
 
 @Injectable()
 export class UsuarioRepository {
@@ -44,7 +44,7 @@ export class UsuarioRepository {
     return (await this.findById(id))!;
     }
     async update(id: string, changes: Partial<Usuario>): Promise<Usuario | undefined> {
-        const allowedColumns = ['nombre', 'correo', 'contrasenaHash', 'tieneRol',];
+        const allowedColumns = ['nombre', 'correo', 'contrasenaHash'];
         const entries = Object.entries(changes).filter(([column, value]) => allowedColumns.includes(column) && value !== undefined);
         if (entries.length === 0) return this.findById(id);
 
@@ -70,7 +70,6 @@ function toEntity(row: any): Usuario {
     usuario.nombre = row.nombre;
     usuario.correo = row.correo;
     usuario.contrasenaHash = row.contrasenaHash;
-    usuario.tieneRol = row.tieneRol;
     usuario.fecha_creado = row.fecha_creado;
     return usuario;
 }

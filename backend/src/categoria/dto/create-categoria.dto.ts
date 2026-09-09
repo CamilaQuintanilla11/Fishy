@@ -4,8 +4,4 @@ export class CreateCategoriaDto {
     @IsString()
     @IsNotEmpty()
     nombre: string;
-
-    @IsNotEmpty()
-    @IsString()
-    id: string;
 }
