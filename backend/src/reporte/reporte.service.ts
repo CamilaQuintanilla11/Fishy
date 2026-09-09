@@ -35,7 +35,7 @@ export class ReporteService {
     }
     return ReporteResponseDto.fromEntity(reporte);
   }
-  async update(id:string, changes:UpdateReporteDto):Promise<ReporteResponseDto> {
+  async update (id:string, changes:UpdateReporteDto):Promise<ReporteResponseDto> {
     const reporte=await this.repository.findById(id);
     if (!reporte){
       throw new NotFoundException(`Reporte ${id} no encontrado`);
