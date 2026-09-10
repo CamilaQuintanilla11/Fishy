@@ -1,10 +1,10 @@
-import { Rol } from "../../rol/entities/rol.entity";
+import { Riesgo } from "../entities/riesgo.entity";
 
 export class RiesgoResponseDto {
     id: string;
     nombre: string;
 
-    constructor(riesgo: Rol) {
+    constructor(riesgo: Riesgo) {
         this.id = riesgo.id;
         this.nombre = riesgo.nombre;
     }

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-import type { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
+import type { Pool, RowDataPacket } from 'mysql2/promise';
 import { DB_POOL } from '../database/database.module';
 import { Riesgo } from './entities/riesgo.entity';
 
@@ -31,15 +31,6 @@ export class RiesgoRepository {
             [nombre]
         );
         return rows.length > 0 ? toEntity(rows[0]) : undefined;
-    }
-
-    async save(riesgo: Omit<Riesgo, 'id'>): Promise<Riesgo> {
-        const id = randomUUID();
-        await this.pool.query(
-            `INSERT INTO riesgo (id, nombre) VALUES (?, ?)`,
-            [id, riesgo.nombre],
-        );
-        return (await this.findById(id))!;
     }
 }
 

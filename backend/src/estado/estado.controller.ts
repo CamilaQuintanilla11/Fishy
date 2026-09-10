@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { EstadoService } from './estado.service';
 
 

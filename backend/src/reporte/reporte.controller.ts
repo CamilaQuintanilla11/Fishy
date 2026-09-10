@@ -19,7 +19,8 @@ export class ReporteController{
 
   @Post()
   create(@Body() dto:CreateReporteDto):Promise<ReporteResponseDto> {
-    return this.service.create(dto);
+    const userId = 'c8bc4e70-4051-4339-b288-7c71b2ff52ee'; 
+    return this.service.create(userId, dto);
   }
 
   @Get()
