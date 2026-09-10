@@ -27,11 +27,13 @@ CREATE TABLE IF NOT EXISTS estado (
     id CHAR(36) PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE
 );
-
+CREATE TABLE IF NOT EXISTS riesgo (
+    id CHAR(36) PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE
+);
 CREATE TABLE IF NOT EXISTS reporte (
     id CHAR(36) PRIMARY KEY,
     descripcion TEXT NOT NULL,
-    nivel_riesgo VARCHAR(20) NOT NULL,
 
     fecha_pub TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     fecha_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -39,9 +41,11 @@ CREATE TABLE IF NOT EXISTS reporte (
 
     perteneceA CHAR(36) NOT NULL,
     tieneEstado CHAR(36) NOT NULL,
+    tieneRiesgo CHAR(36) NOT NULL,
 
     FOREIGN KEY (perteneceA) REFERENCES usuario(id),
-    FOREIGN KEY (tieneEstado) REFERENCES estado(id)
+    FOREIGN KEY (tieneEstado) REFERENCES estado(id),
+    FOREIGN KEY (tieneRiesgo) REFERENCES riesgo(id)
 );
 
 CREATE TABLE IF NOT EXISTS evidencia (
